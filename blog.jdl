@@ -1,0 +1,22 @@
+
+entity Post {
+    date Instant
+    title String required unique
+    content TextBlob required
+    published Boolean
+}
+
+entity Comment {
+    date Instant
+    content TextBlob required
+    published Boolean
+}
+
+relationship OneToMany {
+    Post to Comment{post(title)}
+}
+
+relationship ManyToOne {
+    Post{user(login)} to User with builtInEntity
+    Comment{user(login)} to User with builtInEntity
+}

@@ -19,6 +19,8 @@ export const Post = () => {
 
   const [sortState, setSortState] = useState(overrideSortStateWithQueryParams(getSortState(pageLocation, 'id'), pageLocation.search));
 
+  const [filter, setFilter] = useState('');
+
   const postList = useAppSelector(state => state.post.entities);
   const loading = useAppSelector(state => state.post.loading);
 
@@ -26,6 +28,7 @@ export const Post = () => {
     dispatch(
       getEntities({
         sort: `${sortState.sort},${sortState.order}`,
+        query: filter,
       }),
     );
   };
@@ -69,6 +72,9 @@ export const Post = () => {
       <h2 id="post-heading" data-cy="PostHeading">
         <Translate contentKey="myApp.post.home.title">Posts</Translate>
         <div className="d-flex justify-content-end">
+          <Button className="me-2" color="white">
+            <label>Filter:</label> <input id="name" name="filter" value={filter} onChange={e => setFilter(e.target.value)} />
+          </Button>
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="myApp.post.home.refreshListLabel">Refresh List</Translate>
           </Button>

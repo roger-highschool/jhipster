@@ -153,13 +153,12 @@ public class PostResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of posts in body.
      */
     @GetMapping("")
-    public List<Post> getAllPosts(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
+    public List<Post> getAllPosts(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        @RequestParam(required = false, defaultValue = "") String filter
+    ) {
         log.debug("REST request to get all Posts");
-        if (eagerload) {
-            return postRepository.findAllWithEagerRelationships();
-        } else {
-            return postRepository.findAll();
-        }
+        if (!filter.isEmpty()) return postRepository.findAllWithFilter("%" + filter + "%"); else return postRepository.findAll();
     }
 
     /**

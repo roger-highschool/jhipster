@@ -14,6 +14,16 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
+    default List<Post> findAllWithFilter(String filter) {
+        return this.findAllWithContentFilter(filter);
+    }
+
+    @Query(
+        value = "select post from Post post where title like :filter or content like :filter",
+        countQuery = "select count(post) from Post post where title like :filter or content like :filter"
+    )
+    List<Post> findAllWithContentFilter(String filter);
+
     @Query("select post from Post post where post.user.login = ?#{authentication.name}")
     List<Post> findByUserIsCurrentUser();
 
